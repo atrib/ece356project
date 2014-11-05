@@ -13,5 +13,11 @@
     </head>
     <body>
         <h1>Hello World!</h1>
+        <ul>
+            <li><a href="doctor_login.jsp">Doctor login</a></li>
+            <li><a href="DBTestServlet">Exercise 3 - Connect to the database</a></li>
+        </ul>
+        
+        
     </body>
 </html>
