@@ -60,6 +60,22 @@
         <servlet-name>patient_invoice</servlet-name>
         <servlet-class>patient.patient_invoice</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>assign_doc</servlet-name>
+        <servlet-class>staff.assign_doc</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>patient_visits</servlet-name>
+        <servlet-class>patient.patient_visits</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>view_patient_details</servlet-name>
+        <servlet-class>doctor.view_patient_details</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>add_patient_comments</servlet-name>
+        <servlet-class>common.add_patient_comments</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Doctor_login_check</servlet-name>
         <url-pattern>/Doctor_login_check</url-pattern>
@@ -115,6 +131,22 @@
     <servlet-mapping>
         <servlet-name>patient_invoice</servlet-name>
         <url-pattern>/patient_invoice</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>assign_doc</servlet-name>
+        <url-pattern>/assign_doc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>patient_visits</servlet-name>
+        <url-pattern>/patient_visits</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>view_patient_details</servlet-name>
+        <url-pattern>/view_patient_details</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>add_patient_comments</servlet-name>
+        <url-pattern>/add_patient_comments</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

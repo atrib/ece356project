@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,7 +26,7 @@
         <jsp:scriptlet>
             }  
         </jsp:scriptlet>
-        <c:if test="${sessionScope.CurrentStaff != null}">
+        <c:if test="${sessionScope.CurrentDoctor != null || sessionScope.CurrentStaff != null}"> 
             <h3>Enter appointment details</h3>
             <table><tr><td><a href="search_doctor" target="_blank">Search doctor ID</a></td><td><a href="search_patient" target="_blank">Search patient SIN</a></td></tr></table>
             <form action="schedule_appointment">

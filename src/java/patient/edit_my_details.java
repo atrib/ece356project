@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,12 +44,46 @@ public class edit_my_details extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
             PreparedStatement pst;
-
+            PatientData currentPatient;
+            int SIN =0;
+            long phone = 0;
+            currentPatient=(PatientData)(request.getSession().getAttribute("CurrentPatient"));
+            try
+            {
+                SIN = Integer.parseInt(request.getParameter("SIN"));
+                pst = con.prepareStatement("SELECT phone_num FROM patient_info WHERE SocialIN = ?");
+                pst.setInt(1, SIN);
+                ResultSet r = pst.executeQuery();
+                if(r.first()!= false)
+                    phone = r.getLong("phone_num");
+                else
+                    throw(new SQLException("Bad SIN specified"));
+            }
+            catch(NumberFormatException e)
+            {
+                if(currentPatient == null)
+                {
+                    response.setContentType("text/html;charset=UTF-8");
+                
+                    PrintWriter out = response.getWriter();
+                    /* TODO output your page here. You may use following sample code. */
+                    out.println("<!DOCTYPE html>");
+                    out.println("<html>");
+                    out.println("<body>");
+                    out.println("<script>window.close();</script>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
+            }
             String query = "UPDATE patient_info SET ";
             if(request.getParameter("HCN").equals("") == false)
             {
                 pst = con.prepareStatement(query + "healthC_num = ?" + "WHERE SocialIN = ?");
                 pst.setInt(1, Integer.parseInt(request.getParameter("HCN")));
+                if(currentPatient != null)
+                    pst.setInt(2, currentPatient.getSIN());
+                else
+                    pst.setInt(2, SIN);
                 pst.executeUpdate();
             }
 
@@ -56,17 +91,20 @@ public class edit_my_details extends HttpServlet {
             {
                 pst = con.prepareStatement(query + "age = ?" + "WHERE SocialIN = ?");
                 pst.setInt(1, Integer.parseInt(request.getParameter("age")));
+                if(currentPatient != null)
+                    pst.setInt(2, currentPatient.getSIN());
+                else
+                    pst.setInt(2, SIN);
                 pst.executeUpdate();
             }  
             
             String address = request.getParameter("address");
-            long phone=0;
-            PatientData currentPatient =(PatientData)(request.getSession().getAttribute("CurrentPatient"));
+            
             try
             {
                 phone = Long.parseLong(request.getParameter("phone"));
             }
-            catch(NullPointerException e)
+            catch(NumberFormatException e)
             {
                 
             }
@@ -86,17 +124,26 @@ public class edit_my_details extends HttpServlet {
                 pst.executeUpdate();
                 pst = con.prepareStatement("UPDATE patient_info SET phone_num = ? WHERE SocialIN = ?");
                 pst.setLong(1, phone);
-                pst.setInt(2, currentPatient.getSIN());
+                if(currentPatient != null)
+                    pst.setInt(2, currentPatient.getSIN());
+                else
+                    pst.setInt(2, SIN);
                 pst.executeUpdate();
                 pst = con.prepareStatement("DELETE FROM phone_number_map WHERE phone_num = ?");
-                pst.setLong(1, currentPatient.getPhone());
+                if(currentPatient != null)
+                    pst.setLong(1, currentPatient.getPhone());
+                else
+                    pst.setLong(1, phone);
                 pst.executeUpdate();
                 currentPatient.setPhone(phone);
             }
             else if(address.equals("") == true && phone != 0)
             {
                 pst = con.prepareStatement("SELECT address FROM phone_number_map WHERE phone_num = ?");
-                pst.setLong(1, currentPatient.getPhone());
+                if(currentPatient != null)
+                    pst.setLong(1, currentPatient.getPhone());
+                else
+                    pst.setLong(1, phone);
                 ResultSet result = pst.executeQuery();
                 if(result.first() == true)
                 {
@@ -108,10 +155,16 @@ public class edit_my_details extends HttpServlet {
                     pst.executeUpdate();
                     pst = con.prepareStatement("UPDATE patient_info SET phone_num = ? WHERE SocialIN = ?");
                     pst.setLong(1, phone);
-                    pst.setInt(2, currentPatient.getSIN());
+                    if(currentPatient != null)
+                        pst.setInt(2, currentPatient.getSIN());
+                    else
+                        pst.setInt(2, SIN);
                     pst.executeUpdate();
                     pst = con.prepareStatement("DELETE FROM phone_number_map WHERE phone_num = ?");
-                    pst.setLong(1, currentPatient.getPhone());
+                    if(currentPatient != null)
+                        pst.setLong(1, currentPatient.getPhone());
+                    else
+                        pst.setLong(1, phone);
                     pst.executeUpdate();
                     currentPatient.setPhone(phone);
                 }

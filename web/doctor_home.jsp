@@ -30,8 +30,9 @@
 --%>
         <c:if test="${sessionScope.CurrentDoctor != null}"> 
             Hello, Dr. ${sessionScope.CurrentDoctor.getName()}
-            <p><li><a href="doctor_patient_view.jsp">See my patients</a></li>
-            <li><a href="doctor_treatment_view.jsp">Record of patients treated</a></li>
+            <p><li><a href="doctor_patient_view.jsp" target="_blank">See my patients</a></li>
+            <li><a href="doctor_treatment_view.jsp" target="_blank">Record of patients treated</a></li>
+            <li><a href="add_patient_comments.jsp" target="_blank">Insert patient comments</a></li>
         </c:if>
     
     </body>

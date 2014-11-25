@@ -32,19 +32,20 @@
 
         <TABLE BORDER="1">
             <TR>
-                <TH>ID</TH>
+                <TH>SIN</TH>
                 <TH>Name</TH>
-                <TH>City</TH>
-                <TH>State</TH>
-                <TH>Country</TH>
+                <TH>Age</TH>
+                <TH>Status</TH>
             </TR>
-            <% while(resultset.next()){ %>
+            <% while(resultset.next())
+            {
+                int SIN = resultset.getInt("SocialIN");
+            %>
             <TR>
-                <TD> <%= resultset.getString(1) %></td>
-                <TD> <%= resultset.getString(2) %></TD>
-                <TD> <%= resultset.getString(3) %></TD>
-                <TD> <%= resultset.getString(4) %></TD>
-                <TD> <%= resultset.getString(5) %></TD>
+                <TD> <a href="view_patient_details?SocialIN=<%=SIN %>"><%= SIN %></a></td>
+                <TD> <%= resultset.getString("name") %></TD>
+                <TD> <%= resultset.getString("age") %></TD>
+                <TD> <%= resultset.getString("status") %></TD>
             </TR>
             <% } %>
         </TABLE>

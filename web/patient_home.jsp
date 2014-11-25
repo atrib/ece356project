@@ -33,6 +33,7 @@
             <p>
             <li><a href="edit_patient_details.jsp" target="_blank">Edit my details</a></li>
             <li><a href="patient_invoice" target="_blank">View my bills</a></li>
+            <li><a href="patient_visits" target="_blank">View my visits</a></li>
         </c:if> 
     </body>
 </html>

@@ -41,6 +41,8 @@
             <c:if test = "${sessionScope.CurrentStaff.getStatus() == sessionScope.CurrentStaff.secretarial_staff_status}" >
                 <li><a href="add_patient.jsp" target="_blank">Add patient</a></li>
                 <li><a href="schedule_appointment.jsp" target="_blank">Schedule appointment</a></li>
+                <li><a href="edit_patient_details.jsp" target="_blank">Edit patient details</a></li>
+                <li><a href="assign_doc.jsp" target="_blank">Assign doctor to patient</a></li>
             </c:if>
         </c:if>
     </body>
