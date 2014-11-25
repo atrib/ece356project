@@ -7,6 +7,10 @@ package doctor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author atri
  */
-public class view_patient_details extends HttpServlet {
+public class patient_access_permission extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,19 +32,58 @@ public class view_patient_details extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            throws ServletException, IOException 
+    {
+        String db_url = "jdbc:mysql://localhost:3306/project";
+        String db_user = "testuser";
+        String db_pwd = "test623";
+        Connection con;
+        
+        try
+        {
+            PrintWriter out = response.getWriter();
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet view_patient_details</title>");            
-            out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet view_patient_details at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+                
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            PreparedStatement pst;
+            
+            int SIN = Integer.parseInt(request.getParameter("patient_SIN"));
+            int doctor_num = ((DoctorData)request.getSession().getAttribute("CurrentDoctor")).getNumber();
+            
+            pst = con.prepareStatement("SELECT * FROM doctor_permissions WHERE patient_SIN = ? AND doctor_num = ?");
+            pst.setInt(1, SIN);
+            pst.setInt(2, doctor_num);
+            ResultSet result = pst.executeQuery();
+            
+            if(result.first())
+            {
+
+                pst = con.prepareStatement("INSERT INTO doctor_permissions(patient_SIN, doctor_num) VALUE (?, ?)");
+                pst.setInt(1, SIN);
+                pst.setInt(2, Integer.parseInt(request.getParameter("doc_ID")));
+                pst.executeUpdate();
+
+                response.setContentType("text/html;charset=UTF-8");
+                out.println("<script>window.close();</script>");
+
+            }
+                
+            else
+            {
+                out.println("You do not have permissions");
+            }
+            out.println("</body></html>");
+            if (con != null) 
+                    con.close();
+        }
+        catch(Exception e)
+        {
+            request.setAttribute("exception", e);
+           
+            request.getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
 

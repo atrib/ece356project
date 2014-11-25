@@ -69,12 +69,16 @@
         <servlet-class>patient.patient_visits</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>view_patient_details</servlet-name>
-        <servlet-class>doctor.view_patient_details</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>add_patient_comments</servlet-name>
         <servlet-class>common.add_patient_comments</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>view_patient_history</servlet-name>
+        <servlet-class>doctor.view_patient_history</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>patient_access_permission</servlet-name>
+        <servlet-class>doctor.patient_access_permission</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Doctor_login_check</servlet-name>
@@ -141,12 +145,16 @@
         <url-pattern>/patient_visits</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>view_patient_details</servlet-name>
-        <url-pattern>/view_patient_details</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>add_patient_comments</servlet-name>
         <url-pattern>/add_patient_comments</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>view_patient_history</servlet-name>
+        <url-pattern>/view_patient_history</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>patient_access_permission</servlet-name>
+        <url-pattern>/patient_access_permission</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

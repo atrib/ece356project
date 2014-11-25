@@ -1,6 +1,6 @@
 <%-- 
-    Document   : doctor_patient_view
-    Created on : 21 Nov, 2014, 1:03:57 AM
+    Document   : doctor_treatment_view
+    Created on : 25 Nov, 2014, 3:58:23 PM
     Author     : atri
 --%>
 
@@ -12,18 +12,17 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Your patients</title>
+        <title>Treated patients</title>
     </head>
     <body>
-        <H1>Patient details: </H1>
-
-        <% 
+        <h1>Treated patient details:</h1>
+    <% 
             String db_url = "jdbc:mysql://localhost:3306/project";
             String db_user = "testuser";
             String db_pwd = "test623";
             Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
             DoctorData currentDoctor = (DoctorData)(request.getSession().getAttribute("CurrentDoctor"));
-            PreparedStatement pst = con.prepareStatement("SELECT * FROM patient_info WHERE default_doctor = ?");
+            PreparedStatement pst = con.prepareStatement("SELECT DISTINCT(patient_SIN) FROM treatment_info WHERE doctor_num = ?");
             pst.setInt(1, currentDoctor.getNumber());
             //pst.setString(2, password);
             pst.executeQuery();      
@@ -39,15 +38,22 @@
             </TR>
             <% while(resultset.next())
             {
-                int SIN = resultset.getInt("SocialIN");
+                int SIN = resultset.getInt("patient_SIN");
             %>
             <TR>
-                <TD> <a href="view_patient_details?SocialIN=<%=SIN %>" target="_blank"><%= SIN %></a></td>
-                <TD> <%= resultset.getString("name") %></TD>
-                <TD> <%= resultset.getString("age") %></TD>
-                <TD> <%= resultset.getString("status") %></TD>
+                <%  pst = con.prepareStatement("SELECT name, age, status FROM patient_info WHERE SocialIN = ?");
+                    pst.setInt(1, SIN);
+                    ResultSet patient_info = pst.executeQuery();
+                    if(patient_info.first() ==true)
+                    {
+                %>
+                <TD> <a href="view_patient_history?SocialIN=<%=SIN %>" target="_blank"><%= SIN %></a></td>
+                <TD> <%= patient_info.getString("name") %></TD>
+                <TD> <%= patient_info.getString("age") %></TD>
+                <TD> <%= patient_info.getString("status") %></TD>
             </TR>
-            <% } %>
+            <%      }
+                } %>
         </TABLE>
     </body>
 </html>

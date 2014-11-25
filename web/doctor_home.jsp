@@ -31,7 +31,9 @@
         <c:if test="${sessionScope.CurrentDoctor != null}"> 
             Hello, Dr. ${sessionScope.CurrentDoctor.getName()}
             <p><li><a href="doctor_patient_view.jsp" target="_blank">See my patients</a></li>
-            <li><a href="doctor_treatment_view.jsp" target="_blank">Record of patients treated</a></li>
+            <li><a href="doctor_treated_patient_view.jsp" target="_blank">Record of patients treated</a></li>
+            <li><a href="view_patient_history.jsp" target="_blank">View patient history</a></li>
+            <li><a href="give_permissions.jsp" target="_blank">Give patient-access permission</a></li>
             <li><a href="add_patient_comments.jsp" target="_blank">Insert patient comments</a></li>
         </c:if>
     
