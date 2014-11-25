@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package doctor;
+package common;
 
-import java.sql.*;
-import java.util.logging.*;
-import TestDB.UserDBAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author atri
  */
-public class Doctor_login_check extends HttpServlet {
+public class logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,30 +28,9 @@ public class Doctor_login_check extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException 
-    {
-        String url;
-        DoctorData currentDoctor = new DoctorData();
-        try
-        {
-            currentDoctor.authenticate(Integer.parseInt(request.getParameter("doctor_num")), request.getParameter("password"));
-            if(currentDoctor.getName().equals("???") == false)
-            {
-                request.getSession().setAttribute("CurrentDoctor", currentDoctor);
-                url = "/doctor_home.jsp";}
-            else
-            {
-                request.setAttribute("unsuccessful_login", new Boolean(true));
-                url = "/doctor_login.jsp";
-            }
-        }
-        catch(Exception e)
-        {
-            request.setAttribute("exception", e);
-            url = "/error.jsp";
-        }
-        request.getServletContext().getRequestDispatcher(url).forward(request, response);
-        
+            throws ServletException, IOException {
+        request.getSession().invalidate();
+        request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -16,6 +16,50 @@
         <servlet-name>UserDBAO</servlet-name>
         <servlet-class>TestDB.UserDBAO</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Staff_login_check</servlet-name>
+        <servlet-class>staff.Staff_login_check</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>add_patient</servlet-name>
+        <servlet-class>staff.add_patient</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>common.logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>search_doctor</servlet-name>
+        <servlet-class>common.search_doctor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>schedule_appointment</servlet-name>
+        <servlet-class>common.schedule_appointment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>search_patient</servlet-name>
+        <servlet-class>common.search_patient</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>patient_bill</servlet-name>
+        <servlet-class>staff.patient_bill</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Patient_login_check</servlet-name>
+        <servlet-class>patient.Patient_login_check</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PatientData</servlet-name>
+        <servlet-class>patient.PatientData</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>edit_my_details</servlet-name>
+        <servlet-class>patient.edit_my_details</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>patient_invoice</servlet-name>
+        <servlet-class>patient.patient_invoice</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Doctor_login_check</servlet-name>
         <url-pattern>/Doctor_login_check</url-pattern>
@@ -27,6 +71,50 @@
     <servlet-mapping>
         <servlet-name>UserDBAO</servlet-name>
         <url-pattern>/UserDBAO</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Staff_login_check</servlet-name>
+        <url-pattern>/Staff_login_check</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>add_patient</servlet-name>
+        <url-pattern>/add_patient</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>search_doctor</servlet-name>
+        <url-pattern>/search_doctor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>schedule_appointment</servlet-name>
+        <url-pattern>/schedule_appointment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>search_patient</servlet-name>
+        <url-pattern>/search_patient</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>patient_bill</servlet-name>
+        <url-pattern>/patient_bill</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Patient_login_check</servlet-name>
+        <url-pattern>/Patient_login_check</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PatientData</servlet-name>
+        <url-pattern>/PatientData</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>edit_my_details</servlet-name>
+        <url-pattern>/edit_my_details</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>patient_invoice</servlet-name>
+        <url-pattern>/patient_invoice</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

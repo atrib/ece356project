@@ -9,13 +9,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Hospital</title>
     </head>
     <body>
         <h1>Hello World!</h1>
         <ul>
             <li><a href="doctor_login.jsp">Doctor login</a></li>
-            <li><a href="DBTestServlet">Exercise 3 - Connect to the database</a></li>
+            <li><a href="staff_login.jsp">Staff login</a>
+            <li><a href="patient_login.jsp">Patient_login</a></li>
+            <li><a href="NewServlet" target="_blank">Test</a></li>
         </ul>
         
         

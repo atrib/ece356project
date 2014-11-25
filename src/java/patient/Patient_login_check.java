@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package doctor;
+package patient;
 
 import java.sql.*;
 import java.util.logging.*;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author atri
  */
-public class Doctor_login_check extends HttpServlet {
+public class Patient_login_check extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,18 +34,18 @@ public class Doctor_login_check extends HttpServlet {
             throws ServletException, IOException 
     {
         String url;
-        DoctorData currentDoctor = new DoctorData();
+        PatientData currentPatient = new PatientData();
         try
         {
-            currentDoctor.authenticate(Integer.parseInt(request.getParameter("doctor_num")), request.getParameter("password"));
-            if(currentDoctor.getName().equals("???") == false)
+            currentPatient.authenticate(Integer.parseInt(request.getParameter("SIN")), request.getParameter("password"));
+            if(currentPatient.getName().equals("???") == false)
             {
-                request.getSession().setAttribute("CurrentDoctor", currentDoctor);
-                url = "/doctor_home.jsp";}
+                request.getSession().setAttribute("CurrentPatient", currentPatient);
+                url = "/patient_home.jsp";}
             else
             {
                 request.setAttribute("unsuccessful_login", new Boolean(true));
-                url = "/doctor_login.jsp";
+                url = "/patient_login.jsp";
             }
         }
         catch(Exception e)

@@ -1,16 +1,15 @@
 <%-- 
-    Document   : doctor_login
-    Created on : 5 Nov, 2014, 12:11:21 AM
+    Document   : staff_login
+    Created on : 20 Nov, 2014, 8:58:00 PM
     Author     : atri
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Doctor login page</title>
+        <title>Staff login page</title>
     </head>
     <body>
         <jsp:scriptlet>            
@@ -24,8 +23,8 @@
             }  
         </jsp:scriptlet>
         <h1>Enter your details to login</h1>
-        <form method="post" action="Doctor_login_check">
-            <label> ID number: </label><input type ='number' name="doctor_num" required="required" placeholder = "10000000"/><p>
+        <form method="post" action="Staff_login_check">
+            <label> ID number: </label><input type ='number' name="staff_num" required="required" placeholder = "10000000"/><p>
                 <label>Password: </label><input type ='password' name="password" required="required" placeholder = "password"/><p>
             <input type="submit" value="Login">
         </form>
