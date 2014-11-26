@@ -18,12 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormatSymbols;
 
-
 /**
  *
  * @author atri
  */
-public class patient_bill extends HttpServlet {
+public class all_patient_bill extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,10 +53,20 @@ public class patient_bill extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
-            
-                int patient_SIN = Integer.parseInt(request.getParameter("patient_SIN"));
-                if(request.getParameter("bill_type").equals("Get monthly bill") == true)
+                
+                pst = con.prepareStatement("SELECT SocialIN from patient_info");
+                ResultSet patient_SINs = pst.executeQuery();
+                out.println("<TABLE BORDER=\"1\">\n" +
+                        "    <TR>\n" +
+                        "        <TH> Patient SIN</TH>"
+                        + "<TH># visits</TH>\n" +
+                        "        <TH>Cost of treatments</TH>\n" +
+                            "<TH>Net bill amount</TH>\n" +
+                        "    </TR>");
+                while(patient_SINs.next())
                 {
+                    int patient_SIN = patient_SINs.getInt("SocialIN");
+
                     int month = Integer.parseInt(request.getParameter("month"));
                     int year = Integer.parseInt(request.getParameter("year"));
                     int num_visits=0;
@@ -85,65 +94,14 @@ public class patient_bill extends HttpServlet {
                         "        <title>Monthly bill for "+ new DateFormatSymbols().getMonths()[month-1]+","+year+"</title>");            
                     out.println("</head>");
                     out.println("<body>");
-                    out.println("<TABLE BORDER=\"1\">\n" +
-                        "    <TR>\n" +
-                        "        <TH># visits</TH>\n" +
-                        "        <TH>Cost of treatments</TH>\n" +
-                            "<TH>Net bill amount</TH>\n" +
-                        "    </TR>");
-                    out.println("<TR><TH>"+ num_visits+"</TH>\n" +
+                    out.println("<TR><TH>"+patient_SIN+"</TH>"
+                            + "<TH>"+ num_visits+"</TH>\n" +
                         "        <TH>"+cost_treatment+"</TH>\n" +
                             "<TH>"+(100*num_visits+ cost_treatment)+"</TH>\n" +
-                        "    </TR></TABLE>");
-                }
-                else if(request.getParameter("bill_type").equals("Get last 5 visit bill") == true)
-                {
-                    pst = con.prepareStatement("SELECT start_time FROM visit_info WHERE patient_SIN = ?");
-                    pst.setInt(1, patient_SIN);
-                    result = pst.executeQuery();
-                    out.println("<head>");
-                    out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
-                        "        <title>Last 5 visit bill</title>");            
-                    out.println("</head>");
-                    out.println("<body>");
-
-                    if(result.last()!= false)
-                    {
-                        out.println("Cost of visit is $100 for visit plus cost of treatments received<p>");
-                        out.println("<TABLE BORDER=\"1\">\n" +
-                        "    <TR>\n" +
-                        "        <TH>Visit Start Date</TH>\n" +
-                        "        <TH>Bill</TH>\n" +
                         "    </TR>");
-                        int count=0;
-                        do
-                        {
-                            pst = con.prepareStatement("SELECT SUM(cost) from treatment_info WHERE patient_SIN = ? AND visit_start_time = ?");
-                            pst.setInt(1, patient_SIN);
-                            Timestamp start_time = result.getTimestamp("start_time");
-                            pst.setTimestamp(2, start_time);
-                            ResultSet result_2 = pst.executeQuery();
-                            result_2.first();
-                            out.println("   <TR>"
-                                    + "         <TH>"+start_time.toString()+"</TH>"
-                                    + "         <TH>"+(100+result_2.getInt(1))+ "</TH>"
-                                    + "     </TR>");
-                            count++;
-                        }
-                        while(result.previous() != false && count < 5);
-                        out.println("</TABLE>");
-                    }
-                    else
-                    {
-                        out.println("No visits");
-                    }
                     
                 }
-                else
-                {
-                    //we have a problem
-                }
-                out.println("</body>");
+                out.println("</TABLE></body>");
                 out.println("</html>");
                 if (con != null) 
                     con.close();
