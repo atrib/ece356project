@@ -27,7 +27,7 @@
             <li><a href="give_permissions.jsp" target="_blank">Give patient-access permission</a></li>
             <li><a href="add_patient_comments.jsp" target="_blank">Insert patient comments</a></li>
             <li><a href="view_patient_comments.jsp" target="_blank">View patient comments</a></li>
-            
+            <li><a href='enter_diagnosis.jsp'>Enter diagnosis and prescription</a></li>
         </c:if>
     
     </body>
