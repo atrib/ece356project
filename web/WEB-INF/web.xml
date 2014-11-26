@@ -104,6 +104,18 @@
         <servlet-name>view_doctor_revenue</servlet-name>
         <servlet-class>staff.view_doctor_revenue</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>get_patient_visit_list</servlet-name>
+        <servlet-class>doctor.get_patient_visit_list</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>add_treatment</servlet-name>
+        <servlet-class>doctor.add_treatment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>edit_patient_status</servlet-name>
+        <servlet-class>doctor.edit_patient_status</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Doctor_login_check</servlet-name>
         <url-pattern>/Doctor_login_check</url-pattern>
@@ -203,6 +215,18 @@
     <servlet-mapping>
         <servlet-name>view_doctor_revenue</servlet-name>
         <url-pattern>/view_doctor_revenue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>get_patient_visit_list</servlet-name>
+        <url-pattern>/get_patient_visit_list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>add_treatment</servlet-name>
+        <url-pattern>/add_treatment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>edit_patient_status</servlet-name>
+        <url-pattern>/edit_patient_status</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

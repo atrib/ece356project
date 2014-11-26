@@ -62,7 +62,7 @@ public class patient_access_permission extends HttpServlet {
             if(result.first())
             {
 
-                pst = con.prepareStatement("INSERT INTO doctor_permissions(patient_SIN, doctor_num) VALUE (?, ?)");
+                pst = con.prepareStatement("INSERT IGNORE INTO doctor_permissions(patient_SIN, doctor_num) VALUE (?, ?)");
                 pst.setInt(1, SIN);
                 pst.setInt(2, Integer.parseInt(request.getParameter("doc_ID")));
                 pst.executeUpdate();

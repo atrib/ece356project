@@ -81,7 +81,7 @@ public class edit_my_details extends HttpServlet {
 
             if(request.getParameter("age").equals("") == false)
             {
-                pst = con.prepareStatement(query + "age = ?" + "WHERE SocialIN = ?");
+                pst = con.prepareStatement(query + "age = ?  WHERE SocialIN = ?");
                 pst.setInt(1, Integer.parseInt(request.getParameter("age")));
                 pst.setInt(2, SIN);
                 pst.executeUpdate();
@@ -150,7 +150,7 @@ public class edit_my_details extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<body>");
-            out.println("<script>No SIN specified</script>");
+            out.println("No SIN specified");
             out.println("</body>");
             out.println("</html>");
             

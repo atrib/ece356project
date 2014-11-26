@@ -43,7 +43,7 @@
                 int SIN = resultset.getInt("SocialIN");
             %>
             <TR>
-                <TD> <a href="view_patient_details?SocialIN=<%=SIN %>" target="_blank"><%= SIN %></a></td>
+                <TD> <a href="view_patient_history?SocialIN=<%=SIN %>" target="_blank"><%= SIN %></a></td>
                 <TD> <%= resultset.getString("name") %></TD>
                 <TD> <%= resultset.getString("age") %></TD>
                 <TD> <%= resultset.getString("status") %></TD>

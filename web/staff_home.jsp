@@ -35,7 +35,7 @@
             <c:if test = "${sessionScope.CurrentStaff.getStatus() == sessionScope.CurrentStaff.financial_staff_status}" >
                 <li><a href="patient_bill.jsp" target="_blank">View patient bill</a></li>
                 <li><a href="all_patient_bill.jsp" target="_blank">View all patient monthly bill</a></li>
-                <li><a href ="doctor_revenue.jsp" >View doctor revenue</a></li>
+                <li><a href ="doctor_revenue.jsp" target="_blank">View doctor revenue</a></li>
             </c:if> 
             <c:if test = "${sessionScope.CurrentStaff.getStatus() == sessionScope.CurrentStaff.legal_staff_status}" >
                 Legal staff

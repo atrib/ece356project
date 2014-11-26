@@ -47,7 +47,7 @@ public class schedule_appointment extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
-            con.prepareStatement("LOCK TABLES appointment_info WRITE").execute();
+            con.prepareStatement("LOCK TABLES appointment_info WRITE, patient_info WRITE").execute();
             PreparedStatement pst; 
             int month = Integer.parseInt(request.getParameter("start_month"));
             int day = Integer.parseInt(request.getParameter("start_day"));
@@ -55,7 +55,7 @@ public class schedule_appointment extends HttpServlet {
             int minute = Integer.parseInt(request.getParameter("start_minute"));
             if(!(month > 12 || month <1 || day<1 || day>31 || hour<0 || hour>23 || minute < 0 || minute >59))
             {
-                Timestamp start_time=new Timestamp(Integer.parseInt(request.getParameter("start_year"))-1900, month, day, hour , minute, 0, 0);
+                Timestamp start_time=new Timestamp(Integer.parseInt(request.getParameter("start_year"))-1900, month-1, day, hour , minute, 0, 0);
             
                 Timestamp end_time;
 

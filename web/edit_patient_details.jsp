@@ -24,7 +24,6 @@
                 <tr><td><label>Phone number</label></td><th><input type="number" name="phone"  placeholder ="9876543210" /></th></tr>
                 <tr><td><label>Address</label></td><th><textarea name="address" rows="5"  placeholder="--address--"></textarea></th></tr>
                 <tr><td><label>Age</label></td><th><input type ="number" name ="age" placeholder="55"/></th></tr>
-                <tr><td><label>If staff, enter patient SIN</label></td><th><input type ="number" name ="SIN" placeholder="10000000"/></th></tr>
                 <tr><td><input type="submit" value="Submit"></td></tr>
             </table>
             </form>

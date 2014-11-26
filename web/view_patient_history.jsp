@@ -14,7 +14,7 @@
     </head>
     <body>
         <c:if test="${sessionScope.CurrentDoctor != null}"> 
-            <form action ="view_patient_history" method="POST">
+            <form action ="view_patient_history" method="GET">
                     Enter patient SIN:<input type="number" name="SocialIN" required="required" placeholder="10000000"/><p>
                 <input type="submit" value="Submit"/><p>
             </form>

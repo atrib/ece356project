@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package staff;
+package doctor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,15 +17,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author atri
  */
-public class see_appointments_today extends HttpServlet {
+public class edit_patient_status extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,61 +38,54 @@ public class see_appointments_today extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
-        Calendar calendar = Calendar.getInstance();
-        String db_url = "jdbc:mysql://localhost:3306/project";
-        String db_user = "testuser";
-        String db_pwd = "test623";
-
         try
         {
+            String db_url = "jdbc:mysql://localhost:3306/project";
+            String db_user = "testuser";
+            String db_pwd = "test623";
+
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
-            con.prepareStatement("LOCK TABLES appointment_info READ");
+            con.prepareStatement("LOCK TABLES patient_info WRITE, doctor_permissions READ").execute();
             PreparedStatement pst;
-            ResultSet result;
-            PrintWriter out = response.getWriter();
+
+            pst = con.prepareStatement("SELECT * FROM doctor_permissions WHERE patient_SIN = ? AND doctor_num=?");
+            pst.setInt(1, Integer.parseInt(request.getParameter("patient_SIN")));
+            pst.setInt(2, ((DoctorData)request.getSession().getAttribute("CurrentDoctor")).getNumber());
+            ResultSet result = pst.executeQuery();
             
-            pst = con.prepareStatement("SELECT * FROM appointment_info WHERE EXTRACT(YEAR FROM start_time) = ? AND EXTRACT(MONTH FROM start_time) = ? AND EXTRACT(DAY FROM start_time) = ?");
-            pst.setInt(1, calendar.get(Calendar.YEAR));
-            pst.setInt(2,  (calendar.get(Calendar.MONTH)+1));
-            pst.setInt(3, calendar.get(Calendar.DAY_OF_MONTH));
-            result = pst.executeQuery();
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");out.println("<head>");
-            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
-                "        <title>Today's appointments</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            if(result.first() == true)
+            if( result.first())
             {
-                out.println("<TABLE BORDER=\"1\">\n" +
-                        "    <TR>\n" +
-                        "        <TH>Patient SIN</TH>\n" +
-                        "        <TH>Doctor number</TH>\n" +
-                        "        <TH>Start time</TH>\n" +
-                        "       <TH>Login</TH>\n"+
-                        "    </TR>");
-                do
-                {
-                    out.println("<TH>"+result.getInt("patient_SIN")+"</TH>"
-                                +"<TH>"+result.getInt("doctor_num")+"</TH>"
-                                +"<TH>"+result.getTimestamp("start_time").toString()+"</TH>"
-                                +"<TH><a href = \"patient_enter_visit?patient_SIN="+result.getInt("patient_SIN")+
-                                                                    "&doctor_num="+result.getInt("doctor_num")+
-                                                                    "&start_time="+result.getTimestamp("start_time").toString()+
-                                                                    "&end_time="+result.getTimestamp("end_time").toString()+"\">Enter</a></TR>");
-                }
-                while(result.next() == true);
-                        
+                pst = con.prepareStatement("UPDATE patient_info SET status = ? WHERE SocialIN = ?");
+                pst.setString(1,request.getParameter("status"));
+                pst.setInt(2, Integer.parseInt(request.getParameter("patient_SIN")));
+                pst.executeUpdate();
+                response.setContentType("text/html;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<body>");
+                out.println("<script>window.close();</script>");
+                out.println("</body>");
+                out.println("</html>");
+                
+                con.prepareStatement("UNLOCK TABLES ").execute();
             }
             else
             {
-                out.println("No appointments today");
+                response.setContentType("text/html;charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<body>");
+                out.println("You dont have permisison or patient does not exist");
+                out.println("</body>");
+                out.println("</html>");
             }
-            out.println("</body></html>");
-            con.prepareStatement("UNLOCK TABLES").execute();
             if (con != null) 
-                    con.close();
+                con.close();
         }
         catch(Exception e)
         {
@@ -101,7 +93,6 @@ public class see_appointments_today extends HttpServlet {
             request.getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

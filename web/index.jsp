@@ -17,7 +17,6 @@
             <li><a href="doctor_login.jsp">Doctor login</a></li>
             <li><a href="staff_login.jsp">Staff login</a>
             <li><a href="patient_login.jsp">Patient_login</a></li>
-            <li><a href="NewServlet" target="_blank">Test</a></li>
         </ul>
         
         

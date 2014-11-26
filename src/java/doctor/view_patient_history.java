@@ -43,7 +43,7 @@ public class view_patient_history extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
-            con.prepareStatement("LOCK TABLES patient_info READ, treatment_info READ, visit_info READ, treatment_info READ").execute();
+            con.prepareStatement("LOCK TABLES patient_info READ, treatment_info READ, visit_info READ, doctor_permissions READ").execute();
             PreparedStatement pst;
             
             int SIN = Integer.parseInt(request.getParameter("SocialIN"));
@@ -97,9 +97,9 @@ public class view_patient_history extends HttpServlet {
                         "<TH>Visit Doctor</TH>\n"+
                         "<TH>Diagnosis</TH>\n"+
                         "<TH>Prescription</TH>\n" +
-                        "<TH>Treatment Name</TH>\n"+
                         "<TH>Treatment Number</TH>\n"+
-                        "<TH>Treatment Doctor</TH>"+
+                        "<TH>Treatment Doctor</TH>\n"+
+                        "<TH>Treatment Name</TH>"+
                     "    </TR>");
                 while(visit_result.next())
                 {
@@ -134,7 +134,7 @@ public class view_patient_history extends HttpServlet {
             }
             else
             {
-                out.println("You do not have permissions");
+                out.println("You do not have permissions or patient does not exist");
             }
             out.println("</body></html>");
             con.prepareStatement("UNLOCK TABLES ").execute();
