@@ -41,6 +41,7 @@ public class PatientData
 
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(db_url, db_user, db_pwd);
+        con.prepareStatement("LOCK TABLES patient_info READ");
         PreparedStatement pst = con.prepareStatement("SELECT * FROM patient_info WHERE SocialIN = ? AND password = ?");
         pst.setInt(1, SIN);
         pst.setString(2, password);
@@ -52,6 +53,7 @@ public class PatientData
             phone_number = result.getLong("phone_num");
         }
 
+        con.prepareStatement("UNLOCK TABLES");
         if (con != null) 
             con.close();
     }   

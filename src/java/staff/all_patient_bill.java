@@ -48,6 +48,7 @@ public class all_patient_bill extends HttpServlet {
 
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+                con.prepareStatement("LOCK TABLES patient_info READ, visit_info READ, treatment_info READ").execute();
                 PreparedStatement pst;
                 ResultSet result;
                 PrintWriter out = response.getWriter();
@@ -103,6 +104,7 @@ public class all_patient_bill extends HttpServlet {
                 }
                 out.println("</TABLE></body>");
                 out.println("</html>");
+                con.prepareStatement("UNLOCK TABLES ").execute();
                 if (con != null) 
                     con.close();
             }

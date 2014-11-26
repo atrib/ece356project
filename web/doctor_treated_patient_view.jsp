@@ -21,11 +21,12 @@
             String db_user = "testuser";
             String db_pwd = "test623";
             Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info READ, treatment_info READ").execute();
             DoctorData currentDoctor = (DoctorData)(request.getSession().getAttribute("CurrentDoctor"));
             PreparedStatement pst = con.prepareStatement("SELECT DISTINCT(patient_SIN) FROM treatment_info WHERE doctor_num = ?");
             pst.setInt(1, currentDoctor.getNumber());
             //pst.setString(2, password);
-            pst.executeQuery();      
+            pst.executeQuery();     
             ResultSet resultset = pst.executeQuery();
         %>
 
@@ -53,7 +54,8 @@
                 <TD> <%= patient_info.getString("status") %></TD>
             </TR>
             <%      }
-                } %>
+                }
+            con.prepareStatement("UNLOCK TABLES").execute(); %>
         </TABLE>
     </body>
 </html>

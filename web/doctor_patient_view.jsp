@@ -22,6 +22,7 @@
             String db_user = "testuser";
             String db_pwd = "test623";
             Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info READ").execute();
             DoctorData currentDoctor = (DoctorData)(request.getSession().getAttribute("CurrentDoctor"));
             PreparedStatement pst = con.prepareStatement("SELECT * FROM patient_info WHERE default_doctor = ?");
             pst.setInt(1, currentDoctor.getNumber());
@@ -47,7 +48,8 @@
                 <TD> <%= resultset.getString("age") %></TD>
                 <TD> <%= resultset.getString("status") %></TD>
             </TR>
-            <% } %>
+            <% } 
+            con.prepareStatement("UNLOCK TABLES").execute();%>
         </TABLE>
     </body>
 </html>

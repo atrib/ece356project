@@ -42,6 +42,7 @@ public class add_patient extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info WRITE, phone_number_map WRITE").execute();
             PreparedStatement pst = con.prepareStatement(   "INSERT IGNORE INTO phone_number_map(phone_num, address)\n" +
                                                             "	VALUES (?, ?)");
             pst.setLong(1, Long.parseLong(request.getParameter("phone")));
@@ -57,6 +58,7 @@ public class add_patient extends HttpServlet {
             pst.setInt(5, Integer.parseInt(request.getParameter("age")));
             pst.setInt(6, Integer.parseInt(request.getParameter("def_doc")));
             pst.executeUpdate();
+            con.prepareStatement("UNLOCK TABLES ").execute();
             
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();

@@ -100,6 +100,10 @@
         <servlet-name>edit_patient_diagnosis</servlet-name>
         <servlet-class>doctor.edit_patient_diagnosis</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>view_doctor_revenue</servlet-name>
+        <servlet-class>staff.view_doctor_revenue</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Doctor_login_check</servlet-name>
         <url-pattern>/Doctor_login_check</url-pattern>
@@ -195,6 +199,10 @@
     <servlet-mapping>
         <servlet-name>edit_patient_diagnosis</servlet-name>
         <url-pattern>/edit_patient_diagnosis</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>view_doctor_revenue</servlet-name>
+        <url-pattern>/view_doctor_revenue</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

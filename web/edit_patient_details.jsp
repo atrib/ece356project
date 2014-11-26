@@ -17,6 +17,9 @@
             <h3>Enter details</h3>
             <form action="edit_my_details" method="POST">
             <table BORDER="0" text-align = "left">
+                <c:if test="${sessionScope.CurrentPatient == null}">
+                    <tr><td><label>Patient SIN</label></td><th> <input type="number" name="patient_SIN"  placeholder="100000000"/></th></tr>
+                </c:if>
                 <tr><td><label>Health Card Number</label></td><th> <input type="number" name="HCN"  placeholder="100000000"/></th></tr>
                 <tr><td><label>Phone number</label></td><th><input type="number" name="phone"  placeholder ="9876543210" /></th></tr>
                 <tr><td><label>Address</label></td><th><textarea name="address" rows="5"  placeholder="--address--"></textarea></th></tr>

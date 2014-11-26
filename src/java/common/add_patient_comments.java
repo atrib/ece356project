@@ -42,6 +42,7 @@ public class add_patient_comments extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info WRITE").execute();
             PreparedStatement pst;
             
             pst = con.prepareStatement("SELECT comments FROM patient_info WHERE SocialIN = ?");
@@ -56,6 +57,7 @@ public class add_patient_comments extends HttpServlet {
             pst.setString(1, comment);
             pst.setInt(2, Integer.parseInt(request.getParameter("patient_SIN")));
             pst.executeUpdate();
+            con.prepareStatement("UNLOCK TABLES ").execute();
                     
             response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {

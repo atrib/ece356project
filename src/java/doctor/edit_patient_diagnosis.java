@@ -49,22 +49,17 @@ public class edit_patient_diagnosis extends HttpServlet {
 
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+                    con.prepareStatement("LOCK TABLES visit_info WRITE").execute();
                     PreparedStatement pst;
 
                     pst = con.prepareStatement("UPDATE visit_info SET diagnosis = ?,prescription = ? WHERE patient_SIN = ? AND start_time = ?");
-                    pst.setString(1, request.getParameter("diagnosis"));
-                    pst.setString(2, request.getParameter("prescription"));
+                    pst.setString(1, (request.getParameter("original_diagnosis")+"\n"+request.getParameter("diagnosis")));
+                    pst.setString(2, (request.getParameter("original_prescription")+"\n"+request.getParameter("prescription")));
                     pst.setInt(3, Integer.parseInt(request.getParameter("patient_SIN")));
                     pst.setString(4, request.getParameter("start_time"));
                     pst.executeUpdate();
-                    
-                    System.out.println(request.getParameter("diagnosis")+"\n");
-                    
-                    System.out.println(request.getParameter("prescription")+"\n");
-                    
-                    System.out.println(request.getParameter("patient_SIN")+"\n");
-                    
-                    System.out.println(request.getParameter("start_time")+"\n");
+                    con.prepareStatement("UNLOCK TABLES ").execute();
+            
                     request.removeAttribute("diagnosis");
                     request.removeAttribute("prescription");
                     
@@ -87,6 +82,7 @@ public class edit_patient_diagnosis extends HttpServlet {
 
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+                con.prepareStatement("LOCK TABLES visit_info READ").execute();
                 PreparedStatement pst;
                 ResultSet visit_result;
                 PrintWriter out = response.getWriter();
@@ -115,13 +111,18 @@ public class edit_patient_diagnosis extends HttpServlet {
                 {
                     out.println("<tr><td>"+visit_num+"</td>");
                     out.println("<td>"+visit_result.getTimestamp("start_time")+"</td>");
-                    out.println("<td><form action='edit_patient_diagnosis' method='POST'><input type=\"hidden\" name=\"patient_SIN\" value='"+SIN+"' /> <input type=\"hidden\" name=\"start_time\" value='"+visit_result.getString("start_time")+"' /> "
-                            + "<textarea rows='5' name='diagnosis'>"+visit_result.getString("diagnosis")+"</textarea></td>");
-                    out.println("<td><textarea rows='5' name='prescription'>"+visit_result.getString("prescription")+"</textarea></td>");
+                    out.println("<td>"+visit_result.getString("diagnosis")+"<p><form action='edit_patient_diagnosis' method='POST'>"
+                            + "<input type=\"hidden\" name=\"patient_SIN\" value='"+SIN+"' /> "
+                            + "<input type=\"hidden\" name=\"start_time\" value='"+visit_result.getString("start_time")+"' /> "
+                            + "<input type=\"hidden\" name=\"original_diagnosis\" value='"+visit_result.getString("diagnosis")+"' />"
+                            + "<input type=\"hidden\" name=\"original_prescription\" value='"+visit_result.getString("prescription")+"' />"
+                            + "<textarea rows='3' name='diagnosis'> </textarea></td>");
+                    out.println("<td>"+visit_result.getString("prescription") +"<p><textarea rows='3' name='prescription'>"+"</textarea></td>");
                     out.println("<td><input type='submit' value='Edit'/></form></td></tr>");
                     visit_num++;
                 }
                 out.println("</TABLE>");
+                con.prepareStatement("UNLOCK TABLES ").execute();
                 if (con != null) 
                     con.close();
 

@@ -49,6 +49,7 @@ public class patient_bill extends HttpServlet {
 
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+                con.prepareStatement("LOCK TABLES visit_info READ, treatment_info READ").execute();
                 PreparedStatement pst;
                 ResultSet result;
                 PrintWriter out = response.getWriter();
@@ -95,6 +96,8 @@ public class patient_bill extends HttpServlet {
                         "        <TH>"+cost_treatment+"</TH>\n" +
                             "<TH>"+(100*num_visits+ cost_treatment)+"</TH>\n" +
                         "    </TR></TABLE>");
+                    con.prepareStatement("UNLOCK TABLES ").execute();
+            
                 }
                 else if(request.getParameter("bill_type").equals("Get last 5 visit bill") == true)
                 {
@@ -137,7 +140,8 @@ public class patient_bill extends HttpServlet {
                     {
                         out.println("No visits");
                     }
-                    
+                    con.prepareStatement("UNLOCK TABLES ").execute();
+            
                 }
                 else
                 {

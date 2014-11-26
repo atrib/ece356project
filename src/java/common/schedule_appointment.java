@@ -47,6 +47,7 @@ public class schedule_appointment extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES appointment_info WRITE").execute();
             PreparedStatement pst; 
             int month = Integer.parseInt(request.getParameter("start_month"));
             int day = Integer.parseInt(request.getParameter("start_day"));
@@ -120,7 +121,11 @@ public class schedule_appointment extends HttpServlet {
                 url = "/schedule_appointment.jsp";
                 request.setAttribute("unsuccessful_schedule", new Boolean(true));
                 request.setAttribute("error_msg", "Given date and time is invalid");
-            } 
+            }
+            con.prepareStatement("UNLOCK TABLES ").execute();
+            
+            if(con != null)
+                con.close();
         }
         catch(Exception e)
         {

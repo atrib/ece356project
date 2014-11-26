@@ -50,6 +50,7 @@ public class patient_enter_visit extends HttpServlet {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
                 PreparedStatement pst;
+                con.prepareStatement("LOCK TABLES appointment_info WRITE, visit_info WRITE").execute();
                 ResultSet result;
                 PrintWriter out = response.getWriter();
                 out.println("<!DOCTYPE html>");
@@ -62,8 +63,8 @@ public class patient_enter_visit extends HttpServlet {
                 pst.setInt(1, patient_SIN);
                 pst.setString(2, request.getParameter("start_time"));
                 pst.setString(3, request.getParameter("end_time"));
-                pst.setString(4, "???");
-                pst.setString(5, "???");
+                pst.setString(4, "");
+                pst.setString(5, "");
                 pst.setInt(6, doctor_num);
                 pst.executeUpdate();
                 
@@ -71,13 +72,17 @@ public class patient_enter_visit extends HttpServlet {
                 pst.setInt(1, patient_SIN);
                 pst.setString(2, request.getParameter("start_time"));
                 pst.executeUpdate();
-                
+                con.prepareStatement("UNLOCK TABLES ").execute();
+            
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
                 out.println("<body>");
                 out.println("<script>window.close();</script>");
                 out.println("</body>");
                 out.println("</html>");
+                
+                if(con!= null)
+                    con.close();
                 
             }
             catch(Exception e)

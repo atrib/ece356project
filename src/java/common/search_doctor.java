@@ -60,6 +60,7 @@ public class search_doctor extends HttpServlet {
                         {
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+                            con.prepareStatement("LOCK TABLES doctor_info READ");
                             PreparedStatement pst = con.prepareStatement("SELECT * FROM doctor_info WHERE name like ?");
                             pst.setString(1, "%"+request.getParameter("doc_search_name")+"%");
                             ResultSet result = pst.executeQuery();
@@ -77,6 +78,7 @@ public class search_doctor extends HttpServlet {
                                         + "     </TR>");
                             }
                             out.println("</TABLE>");
+                            con.prepareStatement("UNLOCK TABLES ");
                             if (con != null) 
                                 con.close();
                         }

@@ -44,11 +44,13 @@ public class view_patient_comments extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info READ").execute();
             PreparedStatement pst;
             
             pst = con.prepareStatement("SELECT name,comments FROM patient_info WHERE SocialIN = ?");
             pst.setInt(1, Integer.parseInt(request.getParameter("patient_SIN")));
             ResultSet result = pst.executeQuery();
+            con.prepareStatement("UNLOCK TABLES ").execute();
             result.first();
             String comment;
             if((comment = result.getString("comments")) != null)

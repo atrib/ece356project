@@ -45,6 +45,7 @@ public class StaffData
 
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(db_url, db_user, db_pwd);
+        con.prepareStatement("LOCK TABLES staff_info READ");
         PreparedStatement pst = con.prepareStatement("SELECT * FROM staff_info WHERE staff_num = ? AND password = ?");
         pst.setInt(1, staff_number);
         pst.setString(2, password);  
@@ -64,6 +65,7 @@ public class StaffData
                 status = legal_staff_status;
         }
 
+        con.prepareStatement("UNLOCK TABLES ");
         if (con != null) 
             con.close();
     }

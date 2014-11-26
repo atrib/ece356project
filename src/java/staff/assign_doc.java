@@ -41,13 +41,15 @@ public class assign_doc extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info WRITE").execute();
             PreparedStatement pst;
         
             pst = con.prepareStatement("UPDATE patient_info SET default_doctor = ? WHERE SocialIN = ?");
             pst.setInt(1, Integer.parseInt(request.getParameter("doc_ID")));
             pst.setInt(2, Integer.parseInt(request.getParameter("patient_SIN")));
             pst.executeUpdate();
-                    
+            con.prepareStatement("UNLOCK TABLES ").execute();
+                   
             response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 /* TODO output your page here. You may use following sample code. */

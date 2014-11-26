@@ -39,6 +39,7 @@ public class DoctorData
 
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(db_url, db_user, db_pwd);
+        con.prepareStatement("LOCK TABLES doctor_info READ");
         PreparedStatement pst = con.prepareStatement("SELECT * FROM doctor_info WHERE doctor_num = ? AND password = ?");
         pst.setInt(1, doctor_number);
         pst.setString(2, password);
@@ -49,6 +50,7 @@ public class DoctorData
             name = result.getString("name");
         }
 
+        con.prepareStatement("UNLOCK TABLES");
         if (con != null) 
             con.close();
     }   

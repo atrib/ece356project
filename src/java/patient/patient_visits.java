@@ -49,6 +49,7 @@ public class patient_visits extends HttpServlet {
 
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(db_url, db_user, db_pwd);
+                con.prepareStatement("LOCK TABLES visit_info READ").execute();
                 PreparedStatement pst;
                 ResultSet visit_result;
                 PrintWriter out = response.getWriter();
@@ -82,6 +83,7 @@ public class patient_visits extends HttpServlet {
                     visit_num++;
                 }
                 out.println("</TABLE>");
+                con.prepareStatement("UNLOCK TABLES").execute();
                 if (con != null) 
                     con.close();
 

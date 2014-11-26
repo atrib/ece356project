@@ -43,47 +43,39 @@ public class edit_my_details extends HttpServlet {
         {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES patient_info WRITE, phone_number_map WRITE").execute();
             PreparedStatement pst;
             PatientData currentPatient;
-            int SIN =0;
-            long phone = 0;
+            long old_phone = 0;
             currentPatient=(PatientData)(request.getSession().getAttribute("CurrentPatient"));
-            try
+            int SIN =0;
+            if(currentPatient != null)
             {
-                SIN = Integer.parseInt(request.getParameter("SIN"));
+                SIN = currentPatient.getSIN();
+                old_phone = currentPatient.getPhone();
+            }
+            else
+            { 
+                SIN = Integer.parseInt(request.getParameter("patient_SIN"));
                 pst = con.prepareStatement("SELECT phone_num FROM patient_info WHERE SocialIN = ?");
                 pst.setInt(1, SIN);
                 ResultSet r = pst.executeQuery();
                 if(r.first()!= false)
-                    phone = r.getLong("phone_num");
+                    old_phone = r.getLong("phone_num");
                 else
                     throw(new SQLException("Bad SIN specified"));
-            }
-            catch(NumberFormatException e)
-            {
-                if(currentPatient == null)
-                {
-                    response.setContentType("text/html;charset=UTF-8");
+            }   
+            
+            
                 
-                    PrintWriter out = response.getWriter();
-                    /* TODO output your page here. You may use following sample code. */
-                    out.println("<!DOCTYPE html>");
-                    out.println("<html>");
-                    out.println("<body>");
-                    out.println("<script>window.close();</script>");
-                    out.println("</body>");
-                    out.println("</html>");
-                }
-            }
+            
+            
             String query = "UPDATE patient_info SET ";
             if(request.getParameter("HCN").equals("") == false)
             {
-                pst = con.prepareStatement(query + "healthC_num = ?" + "WHERE SocialIN = ?");
+                pst = con.prepareStatement(query + "healthC_num = ? WHERE SocialIN = ?");
                 pst.setInt(1, Integer.parseInt(request.getParameter("HCN")));
-                if(currentPatient != null)
-                    pst.setInt(2, currentPatient.getSIN());
-                else
-                    pst.setInt(2, SIN);
+                pst.setInt(2, SIN);
                 pst.executeUpdate();
             }
 
@@ -91,86 +83,77 @@ public class edit_my_details extends HttpServlet {
             {
                 pst = con.prepareStatement(query + "age = ?" + "WHERE SocialIN = ?");
                 pst.setInt(1, Integer.parseInt(request.getParameter("age")));
-                if(currentPatient != null)
-                    pst.setInt(2, currentPatient.getSIN());
-                else
-                    pst.setInt(2, SIN);
+                pst.setInt(2, SIN);
                 pst.executeUpdate();
             }  
             
             String address = request.getParameter("address");
+            long new_phone=0;
+            if(request.getParameter("phone").equals("") == false)
+                new_phone = Long.parseLong(request.getParameter("phone"));
             
-            try
-            {
-                phone = Long.parseLong(request.getParameter("phone"));
-            }
-            catch(NumberFormatException e)
-            {
-                
-            }
-            if(address.equals("") == false && phone == 0)
+            if(address.equals("") == false && new_phone == 0)
             {
                 pst = con.prepareStatement("UPDATE phone_number_map SET address = ? WHERE phone_num = ?");
                 pst.setString(1, address);
                 pst.setLong(2, currentPatient.getPhone());
                 pst.executeUpdate();
             }
-            else if(address.equals("") == false && phone != 0)
+            else if(address.equals("") == false && new_phone != 0)
             {
                 pst = con.prepareStatement("INSERT into phone_number_map(phone_num, address) value (?, ?) on duplicate key update address=?");
-                pst.setLong(1, phone);
+                pst.setLong(1, new_phone);
                 pst.setString(2, address);
                 pst.setString(3, address);
                 pst.executeUpdate();
                 pst = con.prepareStatement("UPDATE patient_info SET phone_num = ? WHERE SocialIN = ?");
-                pst.setLong(1, phone);
-                if(currentPatient != null)
-                    pst.setInt(2, currentPatient.getSIN());
-                else
-                    pst.setInt(2, SIN);
+                pst.setLong(1, new_phone);
+                pst.setInt(2, SIN);
                 pst.executeUpdate();
                 pst = con.prepareStatement("DELETE FROM phone_number_map WHERE phone_num = ?");
-                if(currentPatient != null)
-                    pst.setLong(1, currentPatient.getPhone());
-                else
-                    pst.setLong(1, phone);
+                pst.setLong(1, old_phone);
                 pst.executeUpdate();
-                currentPatient.setPhone(phone);
+                currentPatient.setPhone(new_phone);
             }
-            else if(address.equals("") == true && phone != 0)
+            else if(address.equals("") == true && new_phone != 0)
             {
                 pst = con.prepareStatement("SELECT address FROM phone_number_map WHERE phone_num = ?");
-                if(currentPatient != null)
-                    pst.setLong(1, currentPatient.getPhone());
-                else
-                    pst.setLong(1, phone);
+                pst.setLong(1, old_phone);
                 ResultSet result = pst.executeQuery();
                 if(result.first() == true)
                 {
                     address = result.getString(1);
                     pst = con.prepareStatement("INSERT into phone_number_map(phone_num, address) value (?, ?) on duplicate key update address=?");
-                    pst.setLong(1, phone);
+                    pst.setLong(1, new_phone);
                     pst.setString(2, address);
                     pst.setString(3, address);
                     pst.executeUpdate();
                     pst = con.prepareStatement("UPDATE patient_info SET phone_num = ? WHERE SocialIN = ?");
-                    pst.setLong(1, phone);
-                    if(currentPatient != null)
-                        pst.setInt(2, currentPatient.getSIN());
-                    else
-                        pst.setInt(2, SIN);
+                    pst.setLong(1, new_phone);
+                    pst.setInt(2, SIN);
                     pst.executeUpdate();
                     pst = con.prepareStatement("DELETE FROM phone_number_map WHERE phone_num = ?");
-                    if(currentPatient != null)
-                        pst.setLong(1, currentPatient.getPhone());
-                    else
-                        pst.setLong(1, phone);
+                    pst.setLong(1, old_phone);
                     pst.executeUpdate();
-                    currentPatient.setPhone(phone);
+                    currentPatient.setPhone(new_phone);
                 }
             }
+            con.prepareStatement("UNLOCK TABLES ").execute();
             if(con!= null)
                 con.close();
+        }
+        catch(NumberFormatException e)
+        {
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<body>");
+            out.println("<script>No SIN specified</script>");
+            out.println("</body>");
+            out.println("</html>");
+            
         }
         catch(Exception e)
         {

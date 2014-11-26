@@ -48,6 +48,7 @@ public class patient_access_permission extends HttpServlet {
                 
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(db_url, db_user, db_pwd);
+            con.prepareStatement("LOCK TABLES doctor_permissions WRITE").execute();
             PreparedStatement pst;
             
             int SIN = Integer.parseInt(request.getParameter("patient_SIN"));
@@ -65,7 +66,8 @@ public class patient_access_permission extends HttpServlet {
                 pst.setInt(1, SIN);
                 pst.setInt(2, Integer.parseInt(request.getParameter("doc_ID")));
                 pst.executeUpdate();
-
+                con.prepareStatement("UNLOCK TABLES ").execute();
+            
                 response.setContentType("text/html;charset=UTF-8");
                 out.println("<script>window.close();</script>");
 
